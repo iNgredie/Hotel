@@ -7,8 +7,8 @@ from hotel.schemas.room import Room
 
 class BookingBase(BaseModel):
     id: int
-    date_arrival: datetime.date
-    date_departure: datetime.date
+    date_arrival: datetime
+    date_departure: datetime
     room_id: Room
 
 
