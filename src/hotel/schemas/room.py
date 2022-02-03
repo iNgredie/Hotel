@@ -4,12 +4,12 @@ from pydantic import BaseModel
 
 
 class RoomBase(BaseModel):
-    id: int
     price: Decimal
     bed_place: int
 
 
 class Room(RoomBase):
+    id: int
 
     class Config:
         orm_mode = True

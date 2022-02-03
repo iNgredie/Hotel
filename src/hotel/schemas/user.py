@@ -14,7 +14,7 @@ class UserCreate(BaseUser):
 
 class User(BaseUser):
     id: int
-    role_id: Role
+    role_id: int
 
     class Config:
         orm_mode = True

@@ -1,14 +1,12 @@
-import enum
-
 from pydantic import BaseModel
 
 
 class RoleBase(BaseModel):
-    id: int
     role_type: str
 
 
 class Role(RoleBase):
+    id: int
 
     class Config:
         orm_mode = True

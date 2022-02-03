@@ -2,17 +2,15 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from hotel.schemas.room import Room
-
 
 class BookingBase(BaseModel):
-    id: int
     date_arrival: datetime
     date_departure: datetime
-    room_id: Room
+    room_id: int
 
 
 class Booking(BookingBase):
+    id: int
 
     class Config:
         orm_mode = True

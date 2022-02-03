@@ -1,5 +1,6 @@
 from fastapi import Depends, HTTPException, status
 from passlib.handlers.bcrypt import bcrypt
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from .. import models
@@ -20,11 +21,33 @@ class UserService:
         return bcrypt.hash(password)
 
     def register_new_user(self, user_data: schemas.UserCreate) -> models.User:
+        user_exist = (
+            self.session.query(models.User)
+                .filter(
+                or_(
+                    models.User.username == user_data.username,
+                    models.User.email == user_data.email,
+                )
+            )
+            .first()
+        )
+        if user_exist:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail='Email or username already exists',
+            )
+        role = (
+            self.session.query(models.Role)
+                .filter_by(
+                role_type='manager',
+            )
+            .first()
+        )
         user = models.User(
             email=user_data.email,
             username=user_data.username,
             password_hash=self.hash_password(user_data.password),
-            role_id=1,
+            role_id=role.id,
         )
 
         self.session.add(user)
