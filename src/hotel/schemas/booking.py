@@ -1,11 +1,11 @@
-from datetime import datetime
+from datetime import date
 
 from pydantic import BaseModel
 
 
 class BookingBase(BaseModel):
-    date_arrival: datetime
-    date_departure: datetime
+    date_arrival: date
+    date_departure: date
     room_id: int
 
 

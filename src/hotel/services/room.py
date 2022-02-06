@@ -1,6 +1,8 @@
+from datetime import date
 from typing import List
 
 from fastapi import Depends, HTTPException, status
+from sqlalchemy import and_, join
 from sqlalchemy.orm import Session
 
 from .. import models
@@ -24,14 +26,23 @@ class RoomService:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         return room
 
-    def get_list(self, bed_place: int = None) -> List[models.Room]:
+    def get_list(
+        self,
+        bed_place: int = None,
+        date_arrival: date = None,
+        date_departure: date = None,
+    ) -> List[models.Room]:
+        where = []
         if bed_place:
-            query = (
-                self.session.query(models.Room)
-                .filter(models.Room.bed_place == bed_place)
-            )
-            return query.all()
-        query = self.session.query(models.Room)
+            where.append(models.Room.bed_place == bed_place)
+        # TODO
+        # if date_arrival:
+        #     join_ = join(models.Room, models.Booking,
+        #                  models.Room.id == models.Booking.room_id)
+        query = (
+            self.session.query(models.Room, models.Booking)
+            .where(and_(*where))
+        )
         return query.all()
 
     def create(self, room_data: schemas.RoomCreate) -> models.Room:
