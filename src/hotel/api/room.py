@@ -19,7 +19,7 @@ def create_room(
     return service.create(room_data=room_data)
 
 
-@router.get('/', response_model=List[Room])
+@router.get('/{room_id}', response_model=List[Room])
 def get_rooms(
     bed_place: int = Query(None),
     # TODO date ??

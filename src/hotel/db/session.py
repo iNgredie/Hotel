@@ -1,11 +1,11 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 
 from hotel.settings import settings
 
 engine = create_engine(settings.database_url)
 
-Session = sessionmaker(
+SessionLocal = sessionmaker(
     engine,
     autocommit=False,
     autoflush=False,
@@ -13,7 +13,7 @@ Session = sessionmaker(
 
 
 def get_session() -> Session:
-    session = Session()
+    session = SessionLocal()
     try:
         yield session
     finally:
